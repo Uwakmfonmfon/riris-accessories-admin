@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riri's Accessories — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">✦</div>
+    <h2>Admin Login</h2>
+    <p>Riri's Accessories — Store Management</p>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="you@example.com" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    </div>
+    <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign In →</button>
+    <p class="login-error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;flex-direction:column">
+  <div class="admin-header">
+    <div class="admin-header-brand">Riri's Accessories <span>Admin Panel</span></div>
+    <div class="header-right">
+      <span class="header-email" id="headerEmail"></span>
+      <button class="signout-btn" onclick="doSignOut()">Sign Out</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <aside class="sidebar">
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-val" id="sidebarCount">0</div>
+        <div class="sidebar-stat-label">Products</div>
+      </div>
+      <ul class="sidebar-nav">
+        <li class="active" id="nav-products" onclick="showPanel('products')">📦 Products</li>
+        <li id="nav-add" onclick="showPanel('add')">➕ Add Product</li>
+        <li onclick="window.open('index.html','_blank')">🛍️ View Store</li>
+      </ul>
+    </aside>
+    <main class="main-content">
+
+      <!-- PRODUCTS PANEL -->
+      <div class="panel active" id="panel-products">
+        <div class="panel-header">
+          <h2 class="panel-title" style="margin-bottom:0">All Products</h2>
+          <button class="add-product-btn" onclick="showPanel('add')">+ Add Product</button>
+        </div>
+        <div class="stats-row" id="statsRow">
+          <div class="stat-card"><div class="val" id="s-jewelry">0</div><div class="lbl">💍 Jewelry</div></div>
+          <div class="stat-card"><div class="val" id="s-bags">0</div><div class="lbl">👜 Bags</div></div>
+          <div class="stat-card"><div class="val" id="s-watches">0</div><div class="lbl">⌚ Watches</div></div>
+          <div class="stat-card"><div class="val" id="s-other">0</div><div class="lbl">✦ Other</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="5"><div class="empty-state"><div class="empty-state-icon">✦</div><p>Loading products...</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ADD / EDIT PANEL -->
+      <div class="panel" id="panel-add">
+        <h2 class="panel-title" id="formPanelTitle">Add New Product</h2>
+        <div class="product-form">
+          <input type="hidden" id="editingId" value="">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Product Name *</label>
+              <input type="text" id="pName" placeholder="e.g. Gold Hoop Earrings">
+            </div>
+            <div class="form-group">
+              <label>Price (₦) *</label>
+              <input type="number" id="pPrice" placeholder="e.g. 4500" min="0">
+            </div>
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="pCat">
+                <option value="">Select category...</option>
+                <option value="jewelry">Jewelry</option>
+                <option value="bags">Bags</option>
+                <option value="watches">Watches</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:2px">
+              <label class="checkbox-row">
+                <input type="checkbox" id="pInStock" checked>
+                In Stock
+              </label>
+            </div>
+            <div class="form-group form-full">
+              <label>Description</label>
+              <textarea id="pDesc" placeholder="Brief description of the product..."></textarea>
+            </div>
+            <div class="form-group form-full">
+              <label>Product Image</label>
+              <!-- Upload zone: the file input covers the entire area -->
+              <div class="img-upload-zone" id="uploadZone">
+                <input
+                  type="file"
+                  id="imgFileInput"
+                  accept="image/*"
+                  onchange="handleImageSelect(this)"
+                >
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                  <div class="upload-icon">📷</div>
+                  <p>Tap to choose a photo</p>
+                  <span>From your gallery, camera, or files — JPG, PNG, WEBP (max 5MB)</span>
+                </div>
+                <div class="img-preview-wrap" id="imgPreviewWrap">
+                  <img id="imgPreview" src="" alt="Preview">
+                </div>
+              </div>
+              <p class="upload-status" id="uploadStatus"></p>
+              <button type="button" class="clear-img-btn" id="clearImgBtn" onclick="clearImage()">✕ Remove image</button>
+            </div>
+          </div>
+          <p class="form-error-msg" id="formErrorMsg"></p>
+          <div class="form-actions">
+            <button class="save-btn" id="saveBtn" onclick="saveProduct()">💾 Save Product</button>
+            <button class="cancel-btn" onclick="showPanel('products')">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
