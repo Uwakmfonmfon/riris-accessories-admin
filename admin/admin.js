@@ -1,4 +1,3 @@
-// ===== SUPABASE SETUP =====
 const SUPABASE_URL = 'https://vfjkaishjrxzhqcfeamd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmamthaXNoanJ4emhxY2ZlYW1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzI1NjQsImV4cCI6MjA5ODMwODU2NH0.6v7b1jMx8H_L9qfiz6nUdY-yAlb-sJXUG7Z_EK72kIM';
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
